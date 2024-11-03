@@ -1,36 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { getCurrentlyPlaying } from '../services/spotifyService';
+import React, { useState } from 'react';
+import { useSpotify } from '../services/SpotifyContext';
 import { Box, Card, CardContent, CardMedia, Typography, CircularProgress, Button } from '@mui/material';
 
 const NowPlaying = () => {
-    const [currentTrack, setCurrentTrack] = useState(null);
-    const [error, setError] = useState(null);
+    
     const [isPlaying, setIsPlaying] = useState(true);
 
-    useEffect(() => {
-        let isMounted = true;
-
-        const fetchCurrentTrack = async () => {
-            try {
-                const data = await getCurrentlyPlaying();
-                if (isMounted) {
-                    setCurrentTrack(data);
-                }
-            } catch (err) {
-                if (isMounted) {
-                    setError('Failed to fetch current track');
-                }
-            }
-        };
-
-        const interval = setInterval(fetchCurrentTrack, 5000);
-        fetchCurrentTrack();
-
-        return () => {
-            isMounted = false;
-            clearInterval(interval);
-        };
-    }, []);
+    const { currentTrack, error } = useSpotify();
 
     const togglePlayPause = () => {
         setIsPlaying(!isPlaying);

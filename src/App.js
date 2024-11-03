@@ -6,6 +6,8 @@ import { Box, Stack, ThemeProvider } from '@mui/material';
 import ThoughtsInput from './components/Thoughts';
 import theme from './theme';
 import ThoughtsList from './components/ThoughtsList';
+import { FirebaseProvider } from './services/FirebaseContext'; // 添加这行
+import { SpotifyProvider } from './services/SpotifyContext';
 
 const App = () => {
     const [token, setToken] = useState(null);
@@ -20,16 +22,20 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            {!token ? (
-                <SpotifyAuth />
-            ) : (
-                <Stack spacing={2} alignItems="center">
-                    <NowPlaying />
-                    <Ranking style={{marginTop: '20px'}}/>
-                    <ThoughtsInput />
-                    <ThoughtsList />
-                </Stack>
-            )}
+            <FirebaseProvider>
+                <SpotifyProvider>
+                    {!token ? (
+                    <SpotifyAuth />
+                ) : (
+                        <Stack spacing={2} alignItems="center">
+                            <NowPlaying />
+                            <Ranking style={{ marginTop: '20px' }} />
+                            <ThoughtsInput />
+                            <ThoughtsList />
+                    </Stack>
+                    )}
+                </SpotifyProvider>
+            </FirebaseProvider>
         </ThemeProvider>
     );
 };

@@ -20,6 +20,17 @@ export const getCurrentlyPlaying = async () => {
     return await response.json();
 };
 
+export const togglePlayPause = async () => {
+    const token = getAccessToken();
+    if (!token) return;
+
+    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+        method: 'PUT',
+    })
+
+    return await response.json();
+}
+
 export const spotifyService = {
     getAccessToken,
     getCurrentlyPlaying
