@@ -4,13 +4,10 @@ import { Box, Card, CardContent, CardMedia, Typography, CircularProgress, Button
 
 const NowPlaying = () => {
     
-    const [isPlaying, setIsPlaying] = useState(true);
+    const { isPlaying, setIsPlaying, togglePlayPause } = useSpotify();
 
     const { currentTrack, error } = useSpotify();
 
-    const togglePlayPause = () => {
-        setIsPlaying(!isPlaying);
-    }
     if (error) return <Typography color="error">Error: {error}</Typography>;
     if (!currentTrack) return <CircularProgress />;
 
@@ -40,7 +37,7 @@ const NowPlaying = () => {
                 )}
             </Card>
             <Button variant="contained" sx={{mt:2}} onClick={togglePlayPause}>
-                {isPlaying ? 'Play' : 'Pause'}
+                {isPlaying ? 'Pause' : 'Play'}
             </Button>
         </Box>
     );
