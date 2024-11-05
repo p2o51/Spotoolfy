@@ -5,11 +5,16 @@ const SpotifyContext = createContext(null);
 export const SpotifyProvider = ({children}) => {
     const [currentTrack, setCurrentTrack] = useState(null);
     const [error, setError] = useState(null);
+    const [currentRating, setCurrentRating] = useState('god');
+
     const value = {
         currentTrack,
         setCurrentTrack,
-        error
+        error,
+        currentRating,
+        setCurrentRating
     }
+
     useEffect(() => {
         let isMounted = true;
 
