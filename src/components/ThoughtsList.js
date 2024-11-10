@@ -6,16 +6,17 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 
 const ThoughtsList = () => {
     const [thoughts, setThoughts] = useState([]);
+    const [homoThoughts, setHomoThoughts] = useState([]);
     const { user, db } = useFirebase();
     const { currentTrack } = useSpotify();
 
     useEffect(() => {
+        const thoughtsRef = collection(db, `users/${user.uid}/thoughts`);
+
         const fetchThoughts = async () => {
             if (!user || !currentTrack) return;
 
             try {
-                // 构建查询
-                const thoughtsRef = collection(db, `users/${user.uid}/thoughts`);
                 const q = query(
                     thoughtsRef,
                     where('trackId', '==', currentTrack.item.id),
@@ -37,7 +38,31 @@ const ThoughtsList = () => {
             }
         };
 
+        const fetchHomoThoughts = async () => {
+            if (!user || !currentTrack) return;
+
+            try {
+                const q = query(
+                    thoughtsRef,
+                    where('trackName', '==', currentTrack.item.name),
+                    where('trackId', '!=', currentTrack.item.id),
+                    orderBy('createdAt', 'desc')
+                );
+                const querySnapshot = await getDocs(q);
+                const homoThoughtsList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    createdAt: doc.data().createdAt?.toDate().toLocaleString()
+                }));
+
+                setHomoThoughts(homoThoughtsList);
+
+            } catch (error) {
+                console.error("Error fetching homo thoughts:", error);
+            }
+        };
         fetchThoughts();
+        fetchHomoThoughts();
     }, [user, currentTrack, db]); // 当用户或当前歌曲改变时重新获取数据
 
     return (
@@ -76,6 +101,19 @@ const ThoughtsList = () => {
                         />
                     </ListItem>
                 )}
+                <ListItem alignItems="center">
+                    <ListItemText align="center">
+                        Thoughts that may come from "{currentTrack?.item?.name}"
+                    </ListItemText>
+                </ListItem>
+                {homoThoughts.map((thought) => (
+                    <ListItem key={thought.id}>
+                        <ListItemText 
+                            primary={thought.content}
+                            secondary={`${thought.rating} - ${thought.createdAt}`}
+                        />
+                    </ListItem>
+                ))}
             </List>
         </Paper>
     );
