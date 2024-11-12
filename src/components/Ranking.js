@@ -15,7 +15,7 @@ const Ranking = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4 }}>
             {currentTrack && (
                 <>
-                    <Typography variant="h6">Rate "{currentTrack.item.name}"</Typography>
+                    <Typography variant="h6" sx={{ color: '#fff' }}>Rate "{currentTrack.item.name}"</Typography>
                     <ToggleButtonGroup
                         value={currentRating}
                         exclusive
@@ -23,16 +23,16 @@ const Ranking = () => {
                         aria-label="song rating"
                     >
                         <ToggleButton value="god" aria-label="love song">
-                            <Favorite />
+                            <Favorite sx={{ color: '#fff' }}/>
                         </ToggleButton>
                         <ToggleButton value="mew" aria-label="like song">
-                            <MonitorHeart />
+                            <MonitorHeart sx={{ color: '#fff' }}/>
                         </ToggleButton>
                         <ToggleButton value="shit" aria-label="dislike song">
-                            <ThumbDownAlt />
+                            <ThumbDownAlt sx={{ color: '#fff' }}/>
                         </ToggleButton>
                     </ToggleButtonGroup>
-                    <Typography variant="body1">{currentRating}</Typography>
+                    <Typography variant="body1" sx={{ color: '#fff' }}>{currentRating}</Typography>
                 </>
             )}
         </Box>
